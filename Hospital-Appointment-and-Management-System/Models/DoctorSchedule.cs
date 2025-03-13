@@ -1,4 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
+using System.Collections.Generic;
 
 namespace Hospital_Appointment_and_Management_System.Models
 {
@@ -16,5 +18,9 @@ namespace Hospital_Appointment_and_Management_System.Models
         public DateTime Date { get; set; }
         public TimeSpan StartTime { get; set; }
         public TimeSpan EndTime { get; set; }
+
+        [ForeignKey("DoctorSchedule")]
+        public int DoctorID { get; set; }
+        public DoctorSchedule DoctorSchedule { get; set; }
     }
 }

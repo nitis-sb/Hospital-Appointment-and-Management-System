@@ -4,7 +4,7 @@ namespace Hospital_Appointment_and_Management_System.Repositories
 {
     public interface IDoctorScheduleRepository
     {
-        Task<DoctorSchedule> GetDoctorScheduleAsync(int doctorId);
-        Task UpdateDoctorScheduleAsync(DoctorSchedule schedule);
+        List<TimeSlot> GetAvailableTimeSlots(int doctorId);
+        void UpdateDoctorAvailability(int doctorId, List<TimeSlot> timeSlots);
     }
 }

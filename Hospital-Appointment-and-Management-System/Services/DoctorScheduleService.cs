@@ -12,14 +12,14 @@ namespace Hospital_Appointment_and_Management_System.Services
             _repository = repository;
         }
 
-        public async Task<DoctorSchedule> GetDoctorScheduleAsync(int doctorId)
+        public List<TimeSlot> GetAvailableTimeSlots(int doctorId)
         {
-            return await _repository.GetDoctorScheduleAsync(doctorId);
+            return _repository.GetAvailableTimeSlots(doctorId);
         }
 
-        public async Task UpdateDoctorScheduleAsync(DoctorSchedule schedule)
+        public void UpdateDoctorAvailability(int doctorId, List<TimeSlot> timeSlots)
         {
-            await _repository.UpdateDoctorScheduleAsync(schedule);
+            _repository.UpdateDoctorAvailability(doctorId, timeSlots);
         }
     }
 }
