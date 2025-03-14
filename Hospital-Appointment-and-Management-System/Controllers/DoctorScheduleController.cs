@@ -1,4 +1,5 @@
-﻿using Hospital_Appointment_and_Management_System.Models;
+﻿using Hospital_Appointment_and_Management_System.DTOs;
+using Hospital_Appointment_and_Management_System.Models;
 using Hospital_Appointment_and_Management_System.Services;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -28,10 +29,19 @@ namespace Hospital_Appointment_and_Management_System.Controllers
         }
 
         [HttpPut("{doctorId}")]
-        public IActionResult UpdateDoctorAvailability(int doctorId, [FromBody] List<TimeSlot> timeSlots)
+        public IActionResult UpdateDoctorAvailability(int doctorId, [FromBody] List<UpdateDoctorAvailabilityDTO> timeSlotsDto)
         {
+            var timeSlots = timeSlotsDto.Select(dto => new TimeSlot
+            {
+                TimeSlotID = dto.TimeSlotID,
+                Date = dto.Date,
+                StartTime = dto.StartTime,
+                EndTime = dto.EndTime,
+                DoctorID = doctorId
+            }).ToList();
+
             _service.UpdateDoctorAvailability(doctorId, timeSlots);
-            return NoContent();
+            return Ok(new { message = "Doctor availability updated successfully." });
         }
     }
 }
