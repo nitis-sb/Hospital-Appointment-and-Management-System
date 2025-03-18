@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Hospital_Appointment_and_Management_System.Migrations
 {
     [DbContext(typeof(DoctorScheduleDbContext))]
-    [Migration("20250313071051_SeedDoctorScheduleData")]
-    partial class SeedDoctorScheduleData
+    [Migration("20250318095019_initial1")]
+    partial class initial1
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -97,6 +97,12 @@ namespace Hospital_Appointment_and_Management_System.Migrations
                     b.Property<TimeSpan>("EndTime")
                         .HasColumnType("time");
 
+                    b.Property<bool>("IsBooked")
+                        .HasColumnType("bit");
+
+                    b.Property<int?>("PatientID")
+                        .HasColumnType("int");
+
                     b.Property<TimeSpan>("StartTime")
                         .HasColumnType("time");
 
@@ -113,6 +119,7 @@ namespace Hospital_Appointment_and_Management_System.Migrations
                             Date = new DateTime(2025, 3, 14, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             DoctorID = 1,
                             EndTime = new TimeSpan(0, 11, 0, 0, 0),
+                            IsBooked = false,
                             StartTime = new TimeSpan(0, 9, 0, 0, 0)
                         },
                         new
@@ -121,6 +128,7 @@ namespace Hospital_Appointment_and_Management_System.Migrations
                             Date = new DateTime(2025, 3, 14, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             DoctorID = 1,
                             EndTime = new TimeSpan(0, 16, 0, 0, 0),
+                            IsBooked = false,
                             StartTime = new TimeSpan(0, 14, 0, 0, 0)
                         },
                         new
@@ -129,6 +137,7 @@ namespace Hospital_Appointment_and_Management_System.Migrations
                             Date = new DateTime(2025, 3, 15, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             DoctorID = 2,
                             EndTime = new TimeSpan(0, 12, 0, 0, 0),
+                            IsBooked = false,
                             StartTime = new TimeSpan(0, 10, 0, 0, 0)
                         },
                         new
@@ -137,6 +146,7 @@ namespace Hospital_Appointment_and_Management_System.Migrations
                             Date = new DateTime(2025, 3, 15, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             DoctorID = 2,
                             EndTime = new TimeSpan(0, 15, 0, 0, 0),
+                            IsBooked = false,
                             StartTime = new TimeSpan(0, 13, 0, 0, 0)
                         },
                         new
@@ -145,6 +155,7 @@ namespace Hospital_Appointment_and_Management_System.Migrations
                             Date = new DateTime(2025, 3, 16, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             DoctorID = 3,
                             EndTime = new TimeSpan(0, 11, 0, 0, 0),
+                            IsBooked = false,
                             StartTime = new TimeSpan(0, 9, 0, 0, 0)
                         },
                         new
@@ -153,6 +164,7 @@ namespace Hospital_Appointment_and_Management_System.Migrations
                             Date = new DateTime(2025, 3, 17, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             DoctorID = 4,
                             EndTime = new TimeSpan(0, 10, 0, 0, 0),
+                            IsBooked = false,
                             StartTime = new TimeSpan(0, 8, 0, 0, 0)
                         },
                         new
@@ -161,6 +173,7 @@ namespace Hospital_Appointment_and_Management_System.Migrations
                             Date = new DateTime(2025, 3, 17, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             DoctorID = 4,
                             EndTime = new TimeSpan(0, 13, 0, 0, 0),
+                            IsBooked = false,
                             StartTime = new TimeSpan(0, 11, 0, 0, 0)
                         },
                         new
@@ -169,6 +182,7 @@ namespace Hospital_Appointment_and_Management_System.Migrations
                             Date = new DateTime(2025, 3, 18, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             DoctorID = 5,
                             EndTime = new TimeSpan(0, 16, 0, 0, 0),
+                            IsBooked = false,
                             StartTime = new TimeSpan(0, 14, 0, 0, 0)
                         },
                         new
@@ -177,6 +191,7 @@ namespace Hospital_Appointment_and_Management_System.Migrations
                             Date = new DateTime(2025, 3, 19, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             DoctorID = 6,
                             EndTime = new TimeSpan(0, 11, 0, 0, 0),
+                            IsBooked = false,
                             StartTime = new TimeSpan(0, 9, 0, 0, 0)
                         },
                         new
@@ -185,6 +200,7 @@ namespace Hospital_Appointment_and_Management_System.Migrations
                             Date = new DateTime(2025, 3, 20, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             DoctorID = 7,
                             EndTime = new TimeSpan(0, 12, 0, 0, 0),
+                            IsBooked = false,
                             StartTime = new TimeSpan(0, 10, 0, 0, 0)
                         });
                 });

@@ -8,7 +8,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace Hospital_Appointment_and_Management_System.Migrations
 {
     /// <inheritdoc />
-    public partial class SeedDoctorScheduleData : Migration
+    public partial class initial : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -34,17 +34,19 @@ namespace Hospital_Appointment_and_Management_System.Migrations
                     Date = table.Column<DateTime>(type: "datetime2", nullable: false),
                     StartTime = table.Column<TimeSpan>(type: "time", nullable: false),
                     EndTime = table.Column<TimeSpan>(type: "time", nullable: false),
-                    DoctorID = table.Column<int>(type: "int", nullable: false)
+                    DoctorID = table.Column<int>(type: "int", nullable: false),
+                    IsBooked = table.Column<bool>(type: "bit", nullable: false),
+                    PatientID = table.Column<int>(type: "int", nullable: true),
+                    DoctorScheduleDoctorID = table.Column<int>(type: "int", nullable: true)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_TimeSlots", x => x.TimeSlotID);
                     table.ForeignKey(
-                        name: "FK_TimeSlots_DoctorSchedules_DoctorID",
-                        column: x => x.DoctorID,
+                        name: "FK_TimeSlots_DoctorSchedules_DoctorScheduleDoctorID",
+                        column: x => x.DoctorScheduleDoctorID,
                         principalTable: "DoctorSchedules",
-                        principalColumn: "DoctorID",
-                        onDelete: ReferentialAction.Cascade);
+                        principalColumn: "DoctorID");
                 });
 
             migrationBuilder.InsertData(
@@ -66,25 +68,25 @@ namespace Hospital_Appointment_and_Management_System.Migrations
 
             migrationBuilder.InsertData(
                 table: "TimeSlots",
-                columns: new[] { "TimeSlotID", "Date", "DoctorID", "EndTime", "StartTime" },
+                columns: new[] { "TimeSlotID", "Date", "DoctorID", "DoctorScheduleDoctorID", "EndTime", "IsBooked", "PatientID", "StartTime" },
                 values: new object[,]
                 {
-                    { 1, new DateTime(2025, 3, 14, 0, 0, 0, 0, DateTimeKind.Unspecified), 1, new TimeSpan(0, 11, 0, 0, 0), new TimeSpan(0, 9, 0, 0, 0) },
-                    { 2, new DateTime(2025, 3, 14, 0, 0, 0, 0, DateTimeKind.Unspecified), 1, new TimeSpan(0, 16, 0, 0, 0), new TimeSpan(0, 14, 0, 0, 0) },
-                    { 3, new DateTime(2025, 3, 15, 0, 0, 0, 0, DateTimeKind.Unspecified), 2, new TimeSpan(0, 12, 0, 0, 0), new TimeSpan(0, 10, 0, 0, 0) },
-                    { 4, new DateTime(2025, 3, 15, 0, 0, 0, 0, DateTimeKind.Unspecified), 2, new TimeSpan(0, 15, 0, 0, 0), new TimeSpan(0, 13, 0, 0, 0) },
-                    { 5, new DateTime(2025, 3, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), 3, new TimeSpan(0, 11, 0, 0, 0), new TimeSpan(0, 9, 0, 0, 0) },
-                    { 6, new DateTime(2025, 3, 17, 0, 0, 0, 0, DateTimeKind.Unspecified), 4, new TimeSpan(0, 10, 0, 0, 0), new TimeSpan(0, 8, 0, 0, 0) },
-                    { 7, new DateTime(2025, 3, 17, 0, 0, 0, 0, DateTimeKind.Unspecified), 4, new TimeSpan(0, 13, 0, 0, 0), new TimeSpan(0, 11, 0, 0, 0) },
-                    { 8, new DateTime(2025, 3, 18, 0, 0, 0, 0, DateTimeKind.Unspecified), 5, new TimeSpan(0, 16, 0, 0, 0), new TimeSpan(0, 14, 0, 0, 0) },
-                    { 9, new DateTime(2025, 3, 19, 0, 0, 0, 0, DateTimeKind.Unspecified), 6, new TimeSpan(0, 11, 0, 0, 0), new TimeSpan(0, 9, 0, 0, 0) },
-                    { 10, new DateTime(2025, 3, 20, 0, 0, 0, 0, DateTimeKind.Unspecified), 7, new TimeSpan(0, 12, 0, 0, 0), new TimeSpan(0, 10, 0, 0, 0) }
+                    { 1, new DateTime(2025, 3, 14, 0, 0, 0, 0, DateTimeKind.Unspecified), 1, null, new TimeSpan(0, 11, 0, 0, 0), false, null, new TimeSpan(0, 9, 0, 0, 0) },
+                    { 2, new DateTime(2025, 3, 14, 0, 0, 0, 0, DateTimeKind.Unspecified), 1, null, new TimeSpan(0, 16, 0, 0, 0), false, null, new TimeSpan(0, 14, 0, 0, 0) },
+                    { 3, new DateTime(2025, 3, 15, 0, 0, 0, 0, DateTimeKind.Unspecified), 2, null, new TimeSpan(0, 12, 0, 0, 0), false, null, new TimeSpan(0, 10, 0, 0, 0) },
+                    { 4, new DateTime(2025, 3, 15, 0, 0, 0, 0, DateTimeKind.Unspecified), 2, null, new TimeSpan(0, 15, 0, 0, 0), false, null, new TimeSpan(0, 13, 0, 0, 0) },
+                    { 5, new DateTime(2025, 3, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), 3, null, new TimeSpan(0, 11, 0, 0, 0), false, null, new TimeSpan(0, 9, 0, 0, 0) },
+                    { 6, new DateTime(2025, 3, 17, 0, 0, 0, 0, DateTimeKind.Unspecified), 4, null, new TimeSpan(0, 10, 0, 0, 0), false, null, new TimeSpan(0, 8, 0, 0, 0) },
+                    { 7, new DateTime(2025, 3, 17, 0, 0, 0, 0, DateTimeKind.Unspecified), 4, null, new TimeSpan(0, 13, 0, 0, 0), false, null, new TimeSpan(0, 11, 0, 0, 0) },
+                    { 8, new DateTime(2025, 3, 18, 0, 0, 0, 0, DateTimeKind.Unspecified), 5, null, new TimeSpan(0, 16, 0, 0, 0), false, null, new TimeSpan(0, 14, 0, 0, 0) },
+                    { 9, new DateTime(2025, 3, 19, 0, 0, 0, 0, DateTimeKind.Unspecified), 6, null, new TimeSpan(0, 11, 0, 0, 0), false, null, new TimeSpan(0, 9, 0, 0, 0) },
+                    { 10, new DateTime(2025, 3, 20, 0, 0, 0, 0, DateTimeKind.Unspecified), 7, null, new TimeSpan(0, 12, 0, 0, 0), false, null, new TimeSpan(0, 10, 0, 0, 0) }
                 });
 
             migrationBuilder.CreateIndex(
-                name: "IX_TimeSlots_DoctorID",
+                name: "IX_TimeSlots_DoctorScheduleDoctorID",
                 table: "TimeSlots",
-                column: "DoctorID");
+                column: "DoctorScheduleDoctorID");
         }
 
         /// <inheritdoc />

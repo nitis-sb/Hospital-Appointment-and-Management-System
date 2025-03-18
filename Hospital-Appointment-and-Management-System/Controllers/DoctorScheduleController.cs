@@ -40,7 +40,9 @@ namespace Hospital_Appointment_and_Management_System.Controllers
                 Date = dto.Date,
                 StartTime = dto.StartTime,
                 EndTime = dto.EndTime,
-                DoctorID = doctorId
+                DoctorID = doctorId,
+                IsBooked = dto.IsBooked, // Set the booking status
+                PatientID = dto.PatientID // Set the patient ID
             }).ToList();
 
             _service.UpdateDoctorAvailability(doctorId, timeSlots);

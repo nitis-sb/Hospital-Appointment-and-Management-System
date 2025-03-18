@@ -4,6 +4,7 @@ using Hospital_Appointment_and_Management_System.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Hospital_Appointment_and_Management_System.Migrations
 {
     [DbContext(typeof(DoctorScheduleDbContext))]
-    partial class DoctorScheduleDbContextModelSnapshot : ModelSnapshot
+    [Migration("20250318094717_initial")]
+    partial class initial
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -91,6 +94,9 @@ namespace Hospital_Appointment_and_Management_System.Migrations
                     b.Property<int>("DoctorID")
                         .HasColumnType("int");
 
+                    b.Property<int?>("DoctorScheduleDoctorID")
+                        .HasColumnType("int");
+
                     b.Property<TimeSpan>("EndTime")
                         .HasColumnType("time");
 
@@ -105,7 +111,7 @@ namespace Hospital_Appointment_and_Management_System.Migrations
 
                     b.HasKey("TimeSlotID");
 
-                    b.HasIndex("DoctorID");
+                    b.HasIndex("DoctorScheduleDoctorID");
 
                     b.ToTable("TimeSlots");
 
@@ -204,13 +210,9 @@ namespace Hospital_Appointment_and_Management_System.Migrations
 
             modelBuilder.Entity("Hospital_Appointment_and_Management_System.Models.TimeSlot", b =>
                 {
-                    b.HasOne("Hospital_Appointment_and_Management_System.Models.DoctorSchedule", "DoctorSchedule")
+                    b.HasOne("Hospital_Appointment_and_Management_System.Models.DoctorSchedule", null)
                         .WithMany("AvailableTimeSlots")
-                        .HasForeignKey("DoctorID")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("DoctorSchedule");
+                        .HasForeignKey("DoctorScheduleDoctorID");
                 });
 
             modelBuilder.Entity("Hospital_Appointment_and_Management_System.Models.DoctorSchedule", b =>
