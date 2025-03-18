@@ -1,5 +1,5 @@
-﻿using Hospital_Appointment_and_Management_System.Models;
-using Hospital_Appointment_and_Management_System.Repositories;
+﻿using Hospital_Appointment_and_Management_System.Interface;
+using Hospital_Appointment_and_Management_System.Models;
 
 namespace Hospital_Appointment_and_Management_System.Services
 {

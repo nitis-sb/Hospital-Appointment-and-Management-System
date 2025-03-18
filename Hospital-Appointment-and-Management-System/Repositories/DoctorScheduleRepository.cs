@@ -1,4 +1,5 @@
 ﻿using Hospital_Appointment_and_Management_System.Data;
+using Hospital_Appointment_and_Management_System.Interface;
 using Hospital_Appointment_and_Management_System.Models;
 using Microsoft.EntityFrameworkCore;
 using System.Threading.Tasks;

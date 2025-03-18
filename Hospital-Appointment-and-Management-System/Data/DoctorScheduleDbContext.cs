@@ -6,7 +6,7 @@ namespace Hospital_Appointment_and_Management_System.Data
 {
     public class DoctorScheduleDbContext : DbContext
     {
-        public DoctorScheduleDbContext(DbContextOptions options) : base(options)
+        public DoctorScheduleDbContext(DbContextOptions<DoctorScheduleDbContext> options) : base(options)
         {
         }
 

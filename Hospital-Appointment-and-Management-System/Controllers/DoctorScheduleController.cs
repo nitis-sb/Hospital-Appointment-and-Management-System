@@ -1,6 +1,7 @@
 ﻿using Hospital_Appointment_and_Management_System.DTOs;
 using Hospital_Appointment_and_Management_System.Models;
 using Hospital_Appointment_and_Management_System.Services;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
@@ -18,6 +19,7 @@ namespace Hospital_Appointment_and_Management_System.Controllers
         }
 
         [HttpGet("{doctorId}")]
+        [Authorize]
         public ActionResult<List<TimeSlot>> GetAvailableTimeSlots(int doctorId)
         {
             var timeSlots = _service.GetAvailableTimeSlots(doctorId);
@@ -29,6 +31,7 @@ namespace Hospital_Appointment_and_Management_System.Controllers
         }
 
         [HttpPut("{doctorId}")]
+        [Authorize]
         public IActionResult UpdateDoctorAvailability(int doctorId, [FromBody] List<UpdateDoctorAvailabilityDTO> timeSlotsDto)
         {
             var timeSlots = timeSlotsDto.Select(dto => new TimeSlot
