@@ -8,7 +8,7 @@ namespace Hospital_Appointment_and_Management_System.Models
     {
         [Key]
         public required int DoctorID { get; set; }
-        public List<TimeSlot> AvailableTimeSlots { get; set; }
+        public List<TimeSlot> AvailableTimeSlots { get; set; } = new List<TimeSlot>();
     }
 
     public class TimeSlot
@@ -22,5 +22,8 @@ namespace Hospital_Appointment_and_Management_System.Models
         [ForeignKey("DoctorSchedule")]
         public int DoctorID { get; set; }
         public DoctorSchedule DoctorSchedule { get; set; }
+
+        public bool IsBooked { get; set; } // Indicates if the slot is booked
+        public int? PatientID { get; set; } // Indicates which patient booked the slot
     }
 }
