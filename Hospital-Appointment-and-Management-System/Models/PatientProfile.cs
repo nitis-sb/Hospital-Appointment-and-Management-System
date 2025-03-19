@@ -17,5 +17,7 @@ namespace Hospital_Appointment_and_Management_System.Models
         public string ContactDetails { get; set; }
 
         public ICollection<MedicalHistory>? MedicalHistories { get; set; }
+
+        public string UserId { get; set; }
     }
 }

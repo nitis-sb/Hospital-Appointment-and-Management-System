@@ -40,6 +40,8 @@ namespace Hospital_Appointment_and_Management_System.Services
 
             var result = await _userManager.CreateAsync(user, patientRegistration.Password);
 
+            var createdUser = await _userManager.FindByEmailAsync(patientRegistration.Email);
+
             if (result.Succeeded)
             {
                 var patientProfile = new PatientProfile
@@ -47,6 +49,7 @@ namespace Hospital_Appointment_and_Management_System.Services
                     Name = patientRegistration.Name,
                     DateOfBirth = patientRegistration.DateOfBirth,
                     ContactDetails = patientRegistration.Email,
+                    UserId = createdUser.Id
                     // Map other properties as needed
                 };
 

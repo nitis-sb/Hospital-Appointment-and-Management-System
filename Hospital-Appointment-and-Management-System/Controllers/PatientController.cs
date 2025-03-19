@@ -1,6 +1,8 @@
 ﻿using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
+using System.Text.Json.Serialization;
+using System.Text.Json;
 using Hospital_Appointment_and_Management_System.DTO;
 using Hospital_Appointment_and_Management_System.Interface;
 using Hospital_Appointment_and_Management_System.Models;
@@ -93,8 +95,22 @@ namespace Hospital_Appointment_and_Management_System.Controllers
         {
             try
             {
+                var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
                 var patientProfile = await _patientService.GetPatientProfileAsync(patientId);
-                return Ok(patientProfile);
+
+                if (patientProfile.UserId != userId)
+                {
+                    return Forbid();
+                }
+
+                var options = new JsonSerializerOptions
+                {
+                    ReferenceHandler = ReferenceHandler.Preserve,
+                    WriteIndented = true
+                };
+
+                var jsonString = JsonSerializer.Serialize(patientProfile, options);
+                return Ok(jsonString);
             }
             catch (System.Exception ex)
             {
@@ -128,20 +144,7 @@ namespace Hospital_Appointment_and_Management_System.Controllers
         }
 
 
-        [HttpDelete("{patientId}")]
-        [Authorize(Roles ="USER")]
-        public async Task<IActionResult> DeletePatientProfile(int patientId)
-        {
-            try
-            {
-                await _patientService.DeletePatientProfileAsync(patientId);
-                return NoContent();
-            }
-            catch (System.Exception ex)
-            {
-                return NotFound(new { message = ex.Message });
-            }
-        }
+      
 
         private string GenerateJwtToken(IdentityUser user)
         {

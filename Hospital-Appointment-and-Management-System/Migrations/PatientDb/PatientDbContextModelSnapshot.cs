@@ -71,17 +71,14 @@ namespace Hospital_Appointment_and_Management_System.Migrations.PatientDb
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("HistoryID"));
 
-                    b.Property<DateOnly>("DateOfVisit")
-                        .HasColumnType("date");
+                    b.Property<DateTime>("DateOfVisit")
+                        .HasColumnType("datetime2");
 
                     b.Property<string>("Diagnosis")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<int>("PatientID")
-                        .HasColumnType("int");
-
-                    b.Property<int?>("PatientProfilePatientID")
                         .HasColumnType("int");
 
                     b.Property<string>("Treatment")
@@ -91,7 +88,7 @@ namespace Hospital_Appointment_and_Management_System.Migrations.PatientDb
 
                     b.HasKey("HistoryID");
 
-                    b.HasIndex("PatientProfilePatientID");
+                    b.HasIndex("PatientID");
 
                     b.ToTable("MedicalHistories");
                 });
@@ -139,6 +136,10 @@ namespace Hospital_Appointment_and_Management_System.Migrations.PatientDb
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<string>("UserId")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
                     b.HasKey("PatientID");
 
                     b.ToTable("PatientProfiles");
@@ -161,6 +162,12 @@ namespace Hospital_Appointment_and_Management_System.Migrations.PatientDb
                     b.Property<TimeSpan>("EndTime")
                         .HasColumnType("time");
 
+                    b.Property<bool>("IsBooked")
+                        .HasColumnType("bit");
+
+                    b.Property<int?>("PatientID")
+                        .HasColumnType("int");
+
                     b.Property<TimeSpan>("StartTime")
                         .HasColumnType("time");
 
@@ -173,9 +180,13 @@ namespace Hospital_Appointment_and_Management_System.Migrations.PatientDb
 
             modelBuilder.Entity("Hospital_Appointment_and_Management_System.Models.MedicalHistory", b =>
                 {
-                    b.HasOne("Hospital_Appointment_and_Management_System.Models.PatientProfile", null)
+                    b.HasOne("Hospital_Appointment_and_Management_System.Models.PatientProfile", "PatientProfile")
                         .WithMany("MedicalHistories")
-                        .HasForeignKey("PatientProfilePatientID");
+                        .HasForeignKey("PatientID")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("PatientProfile");
                 });
 
             modelBuilder.Entity("Hospital_Appointment_and_Management_System.Models.TimeSlot", b =>
