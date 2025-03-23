@@ -16,7 +16,7 @@ namespace Hospital_Appointment_and_Management_System.Controllers
             _notificationService = notificationService;
         }
 
-        [HttpPost]
+               [HttpPost]
         [Authorize(Roles = "ADMIN")]
         public async Task<IActionResult> SendNotification([FromBody] NotificationDTO notificationDto)
         {
@@ -32,7 +32,7 @@ namespace Hospital_Appointment_and_Management_System.Controllers
         }
 
         [HttpDelete("{notificationId}")]
-        public async Task<IActionResult> DeleteNotification(int notificationId)
+                public async Task<IActionResult> DeleteNotification(int notificationId)
         {
             await _notificationService.DeleteNotificationAsync(notificationId);
             return Ok("Notification Successfully Deleted");
