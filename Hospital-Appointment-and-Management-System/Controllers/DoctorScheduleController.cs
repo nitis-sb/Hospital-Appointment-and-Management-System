@@ -18,21 +18,23 @@ namespace Hospital_Appointment_and_Management_System.Controllers
             _service = service;
         }
 
-        [HttpGet("{doctorId}")]
+        // GET endpoint to show the time slots details of a particular doctor
+        [HttpGet("{doctorId}/timeslots")]
         [Authorize]
-        public ActionResult<List<TimeSlot>> GetAvailableTimeSlots(int doctorId)
+        public ActionResult<DoctorSchedule> GetDoctorSchedule(int doctorId)
         {
-            var timeSlots = _service.GetAvailableTimeSlots(doctorId);
-            if (timeSlots == null || timeSlots.Count == 0)
+            var doctorSchedule = _service.GetDoctorSchedule(doctorId);
+            if (doctorSchedule == null)
             {
                 return NotFound();
             }
-            return Ok(timeSlots);
+            return Ok(doctorSchedule);
         }
 
-        [HttpPut("{doctorId}")]
+        // PUT endpoint to update available time slots
+        [HttpPut("{doctorId}/timeslots")]
         [Authorize]
-        public IActionResult UpdateDoctorAvailability(int doctorId, [FromBody] List<UpdateDoctorAvailabilityDTO> timeSlotsDto)
+        public IActionResult UpdateTimeSlots(int doctorId, [FromBody] List<UpdateDoctorAvailabilityDTO> timeSlotsDto)
         {
             var timeSlots = timeSlotsDto.Select(dto => new TimeSlot
             {
@@ -40,21 +42,10 @@ namespace Hospital_Appointment_and_Management_System.Controllers
                 Date = dto.Date,
                 StartTime = dto.StartTime,
                 EndTime = dto.EndTime,
-                DoctorID = doctorId,
-                IsBooked = dto.IsBooked, // Set the booking status
-                PatientID = dto.PatientID // Set the patient ID
+                IsBooked = dto.IsBooked,
+                PatientID = dto.PatientID,
+                IsAvailable = dto.IsAvailable // New property to indicate availability
             }).ToList();
-
-            // Check if any of the time slots are already booked
-            var existingTimeSlots = _service.GetAvailableTimeSlots(doctorId);
-            foreach (var timeSlot in timeSlots)
-            {
-                var existingTimeSlot = existingTimeSlots.FirstOrDefault(ts => ts.TimeSlotID == timeSlot.TimeSlotID);
-                if (existingTimeSlot != null && existingTimeSlot.IsBooked)
-                {
-                    return BadRequest(new { message = $"Sorry, time slot {timeSlot.TimeSlotID} is already booked." });
-                }
-            }
 
             _service.UpdateDoctorAvailability(doctorId, timeSlots);
             return Ok(new { message = "Doctor availability updated successfully." });

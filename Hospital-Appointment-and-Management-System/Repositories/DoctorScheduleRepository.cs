@@ -15,7 +15,7 @@ namespace Hospital_Appointment_and_Management_System.Repositories
             _context = context;
         }
 
-        public List<TimeSlot> GetAvailableTimeSlots(int doctorId)
+        public List<TimeSlot> GetDoctorSchedule(int doctorId)
         {
             return _context.DoctorSchedules
                            .Where(ds => ds.DoctorID == doctorId)
@@ -26,7 +26,7 @@ namespace Hospital_Appointment_and_Management_System.Repositories
         public void UpdateDoctorAvailability(int doctorId, List<TimeSlot> timeSlots)
         {
             var doctorSchedule = _context.DoctorSchedules
-                                         .Include(ds => ds.AvailableTimeSlots) // Include the related time slots
+                                         .Include(ds => ds.AvailableTimeSlots)
                                          .FirstOrDefault(ds => ds.DoctorID == doctorId);
 
             if (doctorSchedule == null)
@@ -43,15 +43,16 @@ namespace Hospital_Appointment_and_Management_System.Repositories
                     existingTimeSlot.Date = timeSlot.Date;
                     existingTimeSlot.StartTime = timeSlot.StartTime;
                     existingTimeSlot.EndTime = timeSlot.EndTime;
-                    existingTimeSlot.IsBooked = timeSlot.IsBooked; // Update booking status
-                    existingTimeSlot.PatientID = timeSlot.PatientID; // Update patient ID
+                    existingTimeSlot.IsBooked = timeSlot.IsBooked;
+                    existingTimeSlot.PatientID = timeSlot.PatientID;
+                    existingTimeSlot.IsAvailable = timeSlot.IsAvailable;
+                }
+                else
+                {
+                    doctorSchedule.AvailableTimeSlots.Add(timeSlot);
                 }
             }
             _context.SaveChanges();
         }
     }
 }
-
-//return await _context.DoctorSchedules
-//    .Include(ds => ds.AvailableTimeSlots)
-//    .FirstAsync(ds => ds.DoctorID == doctorId);

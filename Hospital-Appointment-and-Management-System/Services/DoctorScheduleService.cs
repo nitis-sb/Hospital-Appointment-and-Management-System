@@ -12,9 +12,9 @@ namespace Hospital_Appointment_and_Management_System.Services
             _repository = repository;
         }
 
-        public List<TimeSlot> GetAvailableTimeSlots(int doctorId)
+        public List<TimeSlot> GetDoctorSchedule(int doctorId)
         {
-            return _repository.GetAvailableTimeSlots(doctorId);
+            return _repository.GetDoctorSchedule(doctorId);
         }
 
         public void UpdateDoctorAvailability(int doctorId, List<TimeSlot> timeSlots)
