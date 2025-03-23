@@ -4,6 +4,7 @@ using Hospital_Appointment_and_Management_System.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Hospital_Appointment_and_Management_System.Migrations
 {
     [DbContext(typeof(DoctorScheduleDbContext))]
-    partial class DoctorScheduleDbContextModelSnapshot : ModelSnapshot
+    [Migration("20250323130439_AddDoctorSchedule2")]
+    partial class AddDoctorSchedule2
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
