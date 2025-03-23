@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Hospital_Appointment_and_Management_System.DTO;
 using Hospital_Appointment_and_Management_System.Services;
+using Microsoft.AspNetCore.Authorization;
 
 namespace Hospital_Appointment_and_Management_System.Controllers
 {
@@ -16,6 +17,7 @@ namespace Hospital_Appointment_and_Management_System.Controllers
         }
 
         [HttpPost]
+        [Authorize(Roles = "ADMIN")]
         public async Task<IActionResult> SendNotification([FromBody] NotificationDTO notificationDto)
         {
             await _notificationService.CreateNotificationAsync(notificationDto);

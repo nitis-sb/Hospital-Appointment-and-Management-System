@@ -76,18 +76,7 @@ namespace Hospital_Appointment_and_Management_System.Controllers
 
         
 
-        [HttpPost]
-        [Authorize]
-        public async Task<IActionResult> AddPatient([FromBody] PatientProfile patientProfile)
-        {
-            if (!ModelState.IsValid)
-            {
-                return BadRequest(ModelState);
-            }
-
-            var createdPatient = await _patientService.AddPatientAsync(patientProfile);
-            return CreatedAtAction(nameof(GetPatientProfile), new { patientId = createdPatient.PatientID }, createdPatient);
-        }
+       
 
         [HttpGet("{patientId}")]
         [Authorize]
@@ -100,7 +89,10 @@ namespace Hospital_Appointment_and_Management_System.Controllers
 
                 if (patientProfile.UserId != userId)
                 {
-                    return Forbid();
+                    return new ObjectResult(new { Message = "Custom forbidden message: Access denied." })
+                    {
+                        StatusCode = StatusCodes.Status403Forbidden
+                    };
                 }
 
                 var options = new JsonSerializerOptions
@@ -164,6 +156,7 @@ namespace Hospital_Appointment_and_Management_System.Controllers
             return tokenHandler.WriteToken(token);
         }
 
+       
     }
 
 }

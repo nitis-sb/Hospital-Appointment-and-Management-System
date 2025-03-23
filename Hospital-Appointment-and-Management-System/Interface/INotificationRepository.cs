@@ -1,4 +1,5 @@
-﻿using Hospital_Appointment_and_Management_System.Models;
+﻿using Hospital_Appointment_and_Management_System.DTO;
+using Hospital_Appointment_and_Management_System.Models;
 
 namespace Hospital_Appointment_and_Management_System.Interfaces
 {

@@ -45,6 +45,17 @@ namespace Hospital_Appointment_and_Management_System.Controllers
                 PatientID = dto.PatientID // Set the patient ID
             }).ToList();
 
+            // Check if any of the time slots are already booked
+            var existingTimeSlots = _service.GetAvailableTimeSlots(doctorId);
+            foreach (var timeSlot in timeSlots)
+            {
+                var existingTimeSlot = existingTimeSlots.FirstOrDefault(ts => ts.TimeSlotID == timeSlot.TimeSlotID);
+                if (existingTimeSlot != null && existingTimeSlot.IsBooked)
+                {
+                    return BadRequest(new { message = $"Sorry, time slot {timeSlot.TimeSlotID} is already booked." });
+                }
+            }
+
             _service.UpdateDoctorAvailability(doctorId, timeSlots);
             return Ok(new { message = "Doctor availability updated successfully." });
         }

@@ -35,6 +35,7 @@ namespace Hospital_Appointment_and_Management_System.Repositories
             }
 
             return patientProfile;
+
         }
 
 

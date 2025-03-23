@@ -1,8 +1,10 @@
 ﻿using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
+using Hospital_Appointment_and_Management_System.Dto;
 using Hospital_Appointment_and_Management_System.DTO;
 using Hospital_Appointment_and_Management_System.Interface;
+using Hospital_Appointment_and_Management_System.Interfaces;
 using Hospital_Appointment_and_Management_System.Models;
 using Hospital_Appointment_and_Management_System.Repositories;
 using Microsoft.AspNetCore.Identity;
@@ -17,6 +19,8 @@ namespace Hospital_Appointment_and_Management_System.Services
         private readonly UserManager<IdentityUser> _userManager;
         private readonly SignInManager<IdentityUser> _signInManager;
         private readonly IConfiguration _configuration;
+        private readonly IMedicalHistoryService _medicalHistoryService;
+        
 
         public PatientService(IPatientRepository patientRepository, UserManager<IdentityUser> userManager, SignInManager<IdentityUser> signInManager)
         {
@@ -53,7 +57,20 @@ namespace Hospital_Appointment_and_Management_System.Services
                     // Map other properties as needed
                 };
 
-                return await _patientRepository.AddPatientAsync(patientProfile);
+                var createdPatient = await _patientRepository.AddPatientAsync(patientProfile);
+
+                // Add medical history for the patient
+                var medicalHistoryDto = new MedicalHistoryDto
+                {
+                    Diagnosis = "Sample Diagnosis",
+                    Treatment = "Sample Treatment",
+                    DateOfVisit = DateTime.Now,
+                    PatientID = createdPatient.PatientID // Use the generated PatientID
+                };
+
+                //_medicalHistoryService.AddMedicalHistory(medicalHistoryDto);
+
+                return createdPatient;
             }
 
             var errors = string.Join(", ", result.Errors.Select(e => e.Description));

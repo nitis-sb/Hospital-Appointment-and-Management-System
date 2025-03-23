@@ -19,10 +19,9 @@ namespace Hospital_Appointment_and_Management_System.Repository
 
         public void AddMedicalHistory(MedicalHistory medicalHistory)
         {
-            _context.Add(medicalHistory);
+            _context.MedicalHistories.Add(medicalHistory);
             _context.SaveChanges();
         }
-
         public void DeleteMedicalHistory(int historyId)
         {
             var historyToDelete = _context.MedicalHistories

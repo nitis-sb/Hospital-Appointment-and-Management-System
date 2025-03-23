@@ -11,7 +11,6 @@ using Hospital_Appointment_and_Management_System.Interface;
 using Hospital_Appointment_and_Management_System.Repositories;
 using Hospital_Appointment_and_Management_System.Services;
 using Microsoft.Extensions.Options;
-using Hospital_Appointment_and_Management_System.Data.Service;
 using Hospital_Appointment_and_Management_System.Interfaces;
 using Hospital_Appointment_and_Management_System.Repository;
 
@@ -138,9 +137,9 @@ async Task CreateRoles(IServiceProvider serviceProvider)
     };
 
     string adminPassword = "Admin@1234567890";
-    var user = await userManager.FindByEmailAsync("admin@admin.com");
+    var admin_user = await userManager.FindByEmailAsync("admin@admin.com");
 
-    if (user == null)
+    if (admin_user == null)
     {
         var createAdminUser = await userManager.CreateAsync(adminUser, adminPassword);
         if (createAdminUser.Succeeded)
@@ -159,6 +158,7 @@ builder.Services.AddScoped<IPatientService, PatientService>();
 builder.Services.AddScoped<IDoctorScheduleRepository, DoctorScheduleRepository>();
 builder.Services.AddScoped<DoctorScheduleService>();
 builder.Services.AddScoped<IServiceAppointment, ServiceAppointment>();
+builder.Services.AddScoped<IRepositoryAppointment, RepositoryAppointment>();
 builder.Services.AddScoped<INotificationRepository, NotificationRepository>();
 builder.Services.AddScoped<NotificationService>();
 builder.Services.AddScoped<IMedicalHistoryRepository, MedicalHistoryRepository>();

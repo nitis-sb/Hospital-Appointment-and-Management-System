@@ -4,7 +4,7 @@ using Hospital_Appointment_and_Management_System.DTOs;
 
 namespace Hospital_Appointment_and_Management_System.Interfaces
 {
-    public interface IServiceAppointment
+    public interface IRepositoryAppointment
     {
         Task<IEnumerable<AppointmentDto>> GetAll();
         Task<AppointmentDto> GetElementById(int id);

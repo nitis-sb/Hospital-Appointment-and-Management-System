@@ -2,6 +2,7 @@
 using Hospital_Appointment_and_Management_System.DTOs;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Hospital_Appointment_and_Management_System.Interfaces;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
