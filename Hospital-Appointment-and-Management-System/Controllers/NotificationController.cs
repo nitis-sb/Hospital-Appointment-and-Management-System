@@ -1,7 +1,9 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Hospital_Appointment_and_Management_System.DTO;
-using Hospital_Appointment_and_Management_System.Services;
+using Hospital_Appointment_and_Management_System.Interface;
 using Microsoft.AspNetCore.Authorization;
+using Hospital_Appointment_and_Management_System.Services;
+
 
 namespace Hospital_Appointment_and_Management_System.Controllers
 {
@@ -9,7 +11,7 @@ namespace Hospital_Appointment_and_Management_System.Controllers
     [ApiController]
     public class NotificationsController : ControllerBase
     {
-        private readonly NotificationService _notificationService;
+        private readonly INotificationService _notificationService;
 
         public NotificationsController(NotificationService notificationService)
         {
