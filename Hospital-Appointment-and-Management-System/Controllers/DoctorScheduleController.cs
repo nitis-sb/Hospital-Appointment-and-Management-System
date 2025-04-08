@@ -2,8 +2,9 @@
 using Hospital_Appointment_and_Management_System.Models;
 using Hospital_Appointment_and_Management_System.Services;
 using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using System.Collections.Generic;
+using System.Linq;
 
 namespace Hospital_Appointment_and_Management_System.Controllers
 {
@@ -39,9 +40,9 @@ namespace Hospital_Appointment_and_Management_System.Controllers
             var timeSlots = timeSlotsDto.Select(dto => new TimeSlot
             {
                 TimeSlotID = dto.TimeSlotID,
-                Date = dto.Date,
-                StartTime = dto.StartTime,
-                EndTime = dto.EndTime,
+                Date = dto.Date, // Parsing string to DateTime
+                StartTime = dto.StartTime, // Parsing string to TimeSpan
+                EndTime = dto.EndTime, // Parsing string to TimeSpan
                 IsBooked = dto.IsBooked,
                 PatientID = dto.PatientID,
                 IsAvailable = dto.IsAvailable // New property to indicate availability

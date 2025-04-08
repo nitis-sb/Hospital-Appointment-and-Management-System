@@ -9,7 +9,6 @@ namespace Hospital_Appointment_and_Management_System.DTO
         public DateOnly DateOfBirth { get; set; }
         public string Email { get; set; }
         public string Password { get; set; }
-        public ICollection<MedicalHistory>? MedicalHistories { get; set; }
         
     }
 }

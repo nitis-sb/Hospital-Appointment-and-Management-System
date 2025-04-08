@@ -23,11 +23,11 @@ namespace Hospital_Appointment_and_Management_System.Repositories
             return patientProfile;
         }
 
-        public async Task<PatientProfile> GetPatientProfileAsync(int patientId)
+        public async Task<PatientProfile> GetPatientProfileAsync(string userId)
         {
             var patientProfile = await _context.PatientProfiles
                 .Include(p => p.MedicalHistories)
-                .FirstOrDefaultAsync(p => p.PatientID == patientId);
+                .FirstOrDefaultAsync(p => p.UserId == userId);
 
             if (patientProfile == null)
             {
@@ -46,6 +46,13 @@ namespace Hospital_Appointment_and_Management_System.Repositories
             return patientProfile;
         }
 
+        public async Task<int?> GetPatientIdByUsernameAsync(string username)
+        {
+            var patient = await _context.PatientProfiles
+                .FirstOrDefaultAsync(p => p.ContactDetails == username);
+
+            return patient?.PatientID;
+        }
         public async Task DeletePatientProfileAsync(int patientId)
         {
             var patientProfile = await _context.PatientProfiles.FindAsync(patientId);
@@ -74,7 +81,12 @@ namespace Hospital_Appointment_and_Management_System.Repositories
             throw new NotImplementedException();
         }
 
-        public Task<PatientProfile> UpdatePatientProfileAsync(int patientId, PatientProfile patientProfile)
+        public Task<PatientProfile> UpdatePatientProfileAsync(string userId, PatientProfile patientProfile)
+        {
+            throw new NotImplementedException();
+        }
+
+        public Task<PatientProfile> ProfileAsync(string userId, PatientProfile patientProfile)
         {
             throw new NotImplementedException();
         }

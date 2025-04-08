@@ -7,9 +7,11 @@ namespace Hospital_Appointment_and_Management_System.Interface
     public interface IPatientRepository
     {
         Task<PatientProfile> AddPatientAsync(PatientProfile patientProfile);
-        Task<PatientProfile> GetPatientProfileAsync(int patientId);
+
+        Task<int?> GetPatientIdByUsernameAsync(string username);
+        Task<PatientProfile> GetPatientProfileAsync(string userId);
         Task<PatientProfile> 
-            ProfileAsync(int patientId, PatientProfile patientProfile);
+            ProfileAsync(string userId, PatientProfile patientProfile);
         Task DeletePatientProfileAsync(int patientId);
         Task<PatientProfile> UpdatePatientProfileAsync(PatientProfile patientProfile);
     }

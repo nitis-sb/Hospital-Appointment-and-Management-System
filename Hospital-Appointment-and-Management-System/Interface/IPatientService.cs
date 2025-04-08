@@ -10,8 +10,10 @@ namespace Hospital_Appointment_and_Management_System.Interface
         Task<PatientProfile> RegisterPatientAsync(PatientRegistrationModel patientRegistration);
         Task<IdentityUser> LoginAsync(string email, string password);
 
-        Task<PatientProfile> GetPatientProfileAsync(int patientId);
-        Task<PatientProfile> UpdatePatientProfileAsync(int patientId, PatientProfile patientProfile);
+        Task<int?> GetPatientIdByUsernameAsync(string username);
+
+        Task<PatientProfile> GetPatientProfileAsync(string userId);
+        Task<PatientProfile> UpdatePatientProfileAsync(string userId, PatientProfile patientProfile);
         Task DeletePatientProfileAsync(int patientId);
         Task<PatientProfile> AddPatientAsync(PatientProfile patientProfile);
     }

@@ -3,7 +3,7 @@ using Hospital_Appointment_and_Management_System.Models;
 
 namespace Hospital_Appointment_and_Management_System.Services
 {
-    public class DoctorScheduleService
+    public class DoctorScheduleService : IDoctorSchedulingService
     {
         private readonly IDoctorScheduleRepository _repository;
 

@@ -99,14 +99,19 @@ namespace Hospital_Appointment_and_Management_System.Services
             return await _patientRepository.AddPatientAsync(patientProfile);
         }
 
-        public async Task<PatientProfile> GetPatientProfileAsync(int patientId)
+        public async Task<PatientProfile> GetPatientProfileAsync(string userId)
         {
-            return await _patientRepository.GetPatientProfileAsync(patientId);
+            return await _patientRepository.GetPatientProfileAsync(userId);
         }
 
-        public async Task<PatientProfile> UpdatePatientProfileAsync(int patientId, PatientProfile patientProfile)
+        public async Task<int?> GetPatientIdByUsernameAsync(string username)
         {
-            var existingPatient = await _patientRepository.GetPatientProfileAsync(patientId);
+            return await _patientRepository.GetPatientIdByUsernameAsync(username);
+        }
+
+        public async Task<PatientProfile> UpdatePatientProfileAsync(string userId, PatientProfile patientProfile)
+        {
+            var existingPatient = await _patientRepository.GetPatientProfileAsync(userId);
             if (existingPatient == null)
             {
                 throw new System.Exception("Patient not found");

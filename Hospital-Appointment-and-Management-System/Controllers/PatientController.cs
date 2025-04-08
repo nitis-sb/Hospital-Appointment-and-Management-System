@@ -74,25 +74,21 @@ namespace Hospital_Appointment_and_Management_System.Controllers
             }
         }
 
-        
 
-       
 
-        [HttpGet("{patientId}")]
+
+        [Route("profile/{userId}")]
+        [HttpGet]
         [Authorize]
-        public async Task<IActionResult> GetPatientProfile(int patientId)
+        public async Task<IActionResult> GetPatientProfile(string userId)
         {
             try
             {
-                var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
-                var patientProfile = await _patientService.GetPatientProfileAsync(patientId);
+                var patientProfile = await _patientService.GetPatientProfileAsync(userId);
 
-                if (patientProfile.UserId != userId)
+                if (patientProfile == null)
                 {
-                    return new ObjectResult(new { Message = "Custom forbidden message: Access denied." })
-                    {
-                        StatusCode = StatusCodes.Status403Forbidden
-                    };
+                    return NotFound(new { message = "Patient profile not found." });
                 }
 
                 var options = new JsonSerializerOptions
@@ -101,8 +97,22 @@ namespace Hospital_Appointment_and_Management_System.Controllers
                     WriteIndented = true
                 };
 
-                var jsonString = JsonSerializer.Serialize(patientProfile, options);
-                return Ok(jsonString);
+                //var jsonString = JsonSerializer.Serialize(patientProfile, options);
+                return Ok(patientProfile);
+            }
+            catch (System.Exception ex)
+            {
+                return NotFound(new { message = ex.Message });
+            }
+        }
+        [HttpGet("patients/user/{username}")]
+        [Authorize]
+        public async Task<IActionResult> GetPatientIdByUsername(string username)
+        {
+            try
+            {
+                var patientId = await _patientService.GetPatientIdByUsernameAsync(username);
+                return Ok(patientId);
             }
             catch (System.Exception ex)
             {
@@ -111,10 +121,10 @@ namespace Hospital_Appointment_and_Management_System.Controllers
         }
 
         [HttpPut("{patientId}")]
-        [Authorize]
-        public async Task<IActionResult> UpdatePatientProfile(int patientId, [FromBody] PatientProfile patientProfile)
+        //[Authorize]
+        public async Task<IActionResult> UpdatePatientProfile(string userId, [FromBody] PatientProfile patientProfile)
         {
-            if (patientId != patientProfile.PatientID)
+            if (userId != patientProfile.UserId)
             {
                 return BadRequest("Patient ID mismatch");
             }
@@ -126,7 +136,7 @@ namespace Hospital_Appointment_and_Management_System.Controllers
 
             try
             {
-                var updatedPatient = await _patientService.UpdatePatientProfileAsync(patientId, patientProfile);
+                var updatedPatient = await _patientService.UpdatePatientProfileAsync(userId, patientProfile);
                 return Ok(updatedPatient);
             }
             catch (System.Exception ex)
