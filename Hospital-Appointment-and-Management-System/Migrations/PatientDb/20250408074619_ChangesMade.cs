@@ -3,14 +3,16 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 #nullable disable
 
-namespace Hospital_Appointment_and_Management_System.Migrations.AuthDb
+namespace Hospital_Appointment_and_Management_System.Migrations.PatientDb
 {
     /// <inheritdoc />
-    public partial class InitialAuth : Migration
+    public partial class ChangesMade : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
         {
+           
+
             migrationBuilder.CreateTable(
                 name: "AspNetRoles",
                 columns: table => new
@@ -219,6 +221,10 @@ namespace Hospital_Appointment_and_Management_System.Migrations.AuthDb
 
             migrationBuilder.DropTable(
                 name: "AspNetUsers");
+
+            migrationBuilder.DropColumn(
+                name: "IsAvailable",
+                table: "TimeSlot");
         }
     }
 }

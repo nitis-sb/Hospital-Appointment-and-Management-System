@@ -16,5 +16,6 @@ namespace Hospital_Appointment_and_Management_System.Interface
         Task<PatientProfile> UpdatePatientProfileAsync(string userId, PatientProfile patientProfile);
         Task DeletePatientProfileAsync(int patientId);
         Task<PatientProfile> AddPatientAsync(PatientProfile patientProfile);
+  
     }
 }

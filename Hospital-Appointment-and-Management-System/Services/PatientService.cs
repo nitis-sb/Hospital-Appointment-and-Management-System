@@ -104,6 +104,7 @@ namespace Hospital_Appointment_and_Management_System.Services
             return await _patientRepository.GetPatientProfileAsync(userId);
         }
 
+       
         public async Task<int?> GetPatientIdByUsernameAsync(string username)
         {
             return await _patientRepository.GetPatientIdByUsernameAsync(username);

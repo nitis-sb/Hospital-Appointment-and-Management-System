@@ -8,9 +8,9 @@ namespace Hospital_Appointment_and_Management_System.Repositories
 {
     public class NotificationRepository : INotificationRepository
     {
-        private readonly NotificationDbContext _context;
+        private readonly PatientDbContext _context;
 
-        public NotificationRepository(NotificationDbContext context)
+        public NotificationRepository(PatientDbContext context)
         {
             _context = context;
         }

@@ -75,8 +75,6 @@ namespace Hospital_Appointment_and_Management_System.Controllers
         }
 
 
-
-
         [Route("profile/{userId}")]
         [HttpGet]
         [Authorize]
@@ -97,8 +95,8 @@ namespace Hospital_Appointment_and_Management_System.Controllers
                     WriteIndented = true
                 };
 
-                //var jsonString = JsonSerializer.Serialize(patientProfile, options);
-                return Ok(patientProfile);
+                var jsonString = JsonSerializer.Serialize(patientProfile, options);
+                return Ok(jsonString);
             }
             catch (System.Exception ex)
             {
@@ -106,7 +104,7 @@ namespace Hospital_Appointment_and_Management_System.Controllers
             }
         }
         [HttpGet("patients/user/{username}")]
-        [Authorize]
+        //[Authorize]
         public async Task<IActionResult> GetPatientIdByUsername(string username)
         {
             try

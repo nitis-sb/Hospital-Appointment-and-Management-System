@@ -11,9 +11,9 @@ namespace Hospital_Appointment_and_Management_System.Repository
 {
     public class RepositoryAppointment : IRepositoryAppointment
     {
-        private readonly AppointmentDbContext _context;
+        private readonly PatientDbContext _context;
 
-        public RepositoryAppointment(AppointmentDbContext context)
+        public RepositoryAppointment(PatientDbContext context)
         {
             _context = context;
         }

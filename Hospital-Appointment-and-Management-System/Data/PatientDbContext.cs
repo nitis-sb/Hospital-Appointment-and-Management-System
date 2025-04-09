@@ -1,9 +1,11 @@
 ﻿using Hospital_Appointment_and_Management_System.Models;
+using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 
 namespace Hospital_Appointment_and_Management_System.Data
 {
-    public class PatientDbContext : DbContext
+    public class PatientDbContext : IdentityDbContext
     {
         public PatientDbContext(DbContextOptions<PatientDbContext> options) : base(options)
         {
@@ -14,5 +16,11 @@ namespace Hospital_Appointment_and_Management_System.Data
         public DbSet<MedicalHistory> MedicalHistories { get; set; }
         public DbSet<Notification> Notifications { get; set; }
         public DbSet<PatientProfile> PatientProfiles { get; set; }
+
+        protected override void OnModelCreating(ModelBuilder modelBuilder)
+        {
+            base.OnModelCreating(modelBuilder);
+
+        }
     }
 }

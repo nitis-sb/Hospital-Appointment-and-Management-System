@@ -57,7 +57,7 @@ builder.Services.AddSwaggerGen(options => {
 builder.Services.AddIdentityCore<IdentityUser>()
     .AddRoles<IdentityRole>()
     .AddTokenProvider<DataProtectorTokenProvider<IdentityUser>>("Userreg")
-    .AddEntityFrameworkStores<AuthDbContext>()
+    .AddEntityFrameworkStores<PatientDbContext>()
     .AddDefaultTokenProviders();
 
 builder.Services.Configure<IdentityOptions>(options =>
@@ -88,20 +88,6 @@ builder.Services.AddAuthentication(options =>
 builder.Services.AddDbContext<PatientDbContext>(
     options => options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
 
-builder.Services.AddDbContext<AppointmentDbContext>(
-    options => options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
-
-builder.Services.AddDbContext<DoctorScheduleDbContext>(
-    options => options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
-
-builder.Services.AddDbContext<NotificationDbContext>(
-    options => options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
-
-builder.Services.AddDbContext<MedicalHistoryDbContext>(
-    options => options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
-
-builder.Services.AddDbContext<AuthDbContext>(
-    options => options.UseSqlServer(builder.Configuration.GetConnectionString("AuthConnection")));
 
 // Configure Identity
 builder.Services.AddIdentity<IdentityUser, IdentityRole>(options =>
@@ -114,7 +100,7 @@ builder.Services.AddIdentity<IdentityUser, IdentityRole>(options =>
     ;
     options.User.AllowedUserNameCharacters = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789-._@+";
 })
-    .AddEntityFrameworkStores<AuthDbContext>()
+    .AddEntityFrameworkStores<PatientDbContext>()
     .AddDefaultTokenProviders();
 
 async Task CreateRoles(IServiceProvider serviceProvider)
@@ -187,10 +173,14 @@ if (app.Environment.IsDevelopment())
     app.UseSwaggerUI();
 }
 
+
 app.UseHttpsRedirection();
 app.UseCors("AllowAllOrigins");
 app.UseAuthentication();
 app.UseAuthorization();
+app.UseEndpoints(endpoints =>
+{
+    endpoints.MapControllers();
+});
 app.MapControllers();
-
 app.Run();

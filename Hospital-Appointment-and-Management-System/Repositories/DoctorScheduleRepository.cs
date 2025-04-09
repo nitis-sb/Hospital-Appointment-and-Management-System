@@ -8,9 +8,9 @@ namespace Hospital_Appointment_and_Management_System.Repositories
 {
     public class DoctorScheduleRepository : IDoctorScheduleRepository
     {
-        private readonly DoctorScheduleDbContext _context;
+        private readonly PatientDbContext _context;
 
-        public DoctorScheduleRepository(DoctorScheduleDbContext context)
+        public DoctorScheduleRepository(PatientDbContext context)
         {
             _context = context;
         }

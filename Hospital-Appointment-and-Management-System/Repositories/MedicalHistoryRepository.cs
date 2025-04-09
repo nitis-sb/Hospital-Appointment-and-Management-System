@@ -8,9 +8,9 @@ namespace Hospital_Appointment_and_Management_System.Repository
 {
     public class MedicalHistoryRepository : IMedicalHistoryRepository
     {
-        private readonly MedicalHistoryDbContext _context;
+        private readonly PatientDbContext _context;
        
-        public MedicalHistoryRepository(MedicalHistoryDbContext context)
+        public MedicalHistoryRepository(PatientDbContext context)
         {
             _context = context;
             

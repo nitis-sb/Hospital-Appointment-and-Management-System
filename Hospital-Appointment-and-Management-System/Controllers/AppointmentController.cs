@@ -39,7 +39,7 @@ namespace Hospital_Appointment_and_Management_System.Controllers
         }
 
         [HttpPost]
-        [Authorize]
+        //[Authorize]
         public async Task<ActionResult<AppointmentDto>> Create([FromBody] AppointmentDto appointmentDto)
         {
             if (appointmentDto == null)
@@ -52,7 +52,7 @@ namespace Hospital_Appointment_and_Management_System.Controllers
         }
 
         [HttpPut("{id}")]
-        [Authorize]
+        //[Authorize]
         public async Task<IActionResult> Update(int id, [FromBody] AppointmentDto appointmentDto)
         {
             if (id != appointmentDto.AppointmentID)
@@ -65,7 +65,7 @@ namespace Hospital_Appointment_and_Management_System.Controllers
         }
 
         [HttpDelete("{id}")]
-        [Authorize]
+        //[Authorize]
         public async Task<IActionResult> Delete(int id)
         {
             var result = await _IServiceAppointment.Delete(id);
