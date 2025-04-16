@@ -10,7 +10,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace Hospital_Appointment_and_Management_System.Migrations.PatientDb
 {
-    [DbContext(typeof(PatientDbContext))]
+    [DbContext(typeof(ApplicationDbContext))]
     partial class PatientDbContextModelSnapshot : ModelSnapshot
     {
         protected override void BuildModel(ModelBuilder modelBuilder)
@@ -45,12 +45,21 @@ namespace Hospital_Appointment_and_Management_System.Migrations.PatientDb
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<int>("TimeSlotID")
+                        .HasColumnType("int");
+
                     b.HasKey("AppointmentID");
+
+                    b.HasIndex("DoctorID");
+
+                    b.HasIndex("PatientID");
+
+                    b.HasIndex("TimeSlotID");
 
                     b.ToTable("Appointments");
                 });
 
-            modelBuilder.Entity("Hospital_Appointment_and_Management_System.Models.DoctorSchedule", b =>
+            modelBuilder.Entity("Hospital_Appointment_and_Management_System.Models.Doctor", b =>
                 {
                     b.Property<int>("DoctorID")
                         .ValueGeneratedOnAdd()
@@ -58,7 +67,39 @@ namespace Hospital_Appointment_and_Management_System.Migrations.PatientDb
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("DoctorID"));
 
+                    b.Property<string>("Email")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("UserId")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(450)");
+
                     b.HasKey("DoctorID");
+
+                    b.HasIndex("UserId");
+
+                    b.ToTable("Doctors");
+                });
+
+            modelBuilder.Entity("Hospital_Appointment_and_Management_System.Models.DoctorSchedule", b =>
+                {
+                    b.Property<int>("DoctorScheduleID")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("DoctorScheduleID"));
+
+                    b.Property<int>("DoctorID")
+                        .HasColumnType("int");
+
+                    b.HasKey("DoctorScheduleID");
+
+                    b.HasIndex("DoctorID");
 
                     b.ToTable("DoctorSchedules");
                 });
@@ -153,10 +194,13 @@ namespace Hospital_Appointment_and_Management_System.Migrations.PatientDb
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("TimeSlotID"));
 
+                    b.Property<string>("CancelReason")
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<DateTime>("Date")
                         .HasColumnType("datetime2");
 
-                    b.Property<int>("DoctorID")
+                    b.Property<int>("DoctorScheduleID")
                         .HasColumnType("int");
 
                     b.Property<TimeSpan>("EndTime")
@@ -176,9 +220,9 @@ namespace Hospital_Appointment_and_Management_System.Migrations.PatientDb
 
                     b.HasKey("TimeSlotID");
 
-                    b.HasIndex("DoctorID");
+                    b.HasIndex("DoctorScheduleID");
 
-                    b.ToTable("TimeSlot");
+                    b.ToTable("TimeSlots");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRole", b =>
@@ -379,6 +423,55 @@ namespace Hospital_Appointment_and_Management_System.Migrations.PatientDb
                     b.ToTable("AspNetUserTokens", (string)null);
                 });
 
+            modelBuilder.Entity("Hospital_Appointment_and_Management_System.Models.Appointment", b =>
+                {
+                    b.HasOne("Hospital_Appointment_and_Management_System.Models.DoctorSchedule", "DoctorSchedule")
+                        .WithMany()
+                        .HasForeignKey("DoctorID")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("Hospital_Appointment_and_Management_System.Models.PatientProfile", "PatientProfile")
+                        .WithMany()
+                        .HasForeignKey("PatientID")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("Hospital_Appointment_and_Management_System.Models.TimeSlot", "TimeSlot")
+                        .WithMany()
+                        .HasForeignKey("TimeSlotID")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("DoctorSchedule");
+
+                    b.Navigation("PatientProfile");
+
+                    b.Navigation("TimeSlot");
+                });
+
+            modelBuilder.Entity("Hospital_Appointment_and_Management_System.Models.Doctor", b =>
+                {
+                    b.HasOne("Microsoft.AspNetCore.Identity.IdentityUser", "IdentityUser")
+                        .WithMany()
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("IdentityUser");
+                });
+
+            modelBuilder.Entity("Hospital_Appointment_and_Management_System.Models.DoctorSchedule", b =>
+                {
+                    b.HasOne("Hospital_Appointment_and_Management_System.Models.Doctor", "Doctor")
+                        .WithMany()
+                        .HasForeignKey("DoctorID")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Doctor");
+                });
+
             modelBuilder.Entity("Hospital_Appointment_and_Management_System.Models.MedicalHistory", b =>
                 {
                     b.HasOne("Hospital_Appointment_and_Management_System.Models.PatientProfile", "PatientProfile")
@@ -394,7 +487,7 @@ namespace Hospital_Appointment_and_Management_System.Migrations.PatientDb
                 {
                     b.HasOne("Hospital_Appointment_and_Management_System.Models.DoctorSchedule", "DoctorSchedule")
                         .WithMany("AvailableTimeSlots")
-                        .HasForeignKey("DoctorID")
+                        .HasForeignKey("DoctorScheduleID")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 

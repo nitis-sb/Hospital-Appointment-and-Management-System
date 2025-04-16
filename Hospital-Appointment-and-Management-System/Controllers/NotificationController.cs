@@ -7,21 +7,20 @@ using static Microsoft.ApplicationInsights.MetricDimensionNames.TelemetryContext
 using Hospital_Appointment_and_Management_System.Services;
 using System.Security.Claims;
 
-namespace Notification_Module.Controllers
+namespace Hospital_Appointment_and_Management_System.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
     public class NotificationsController : ControllerBase
     {
         private readonly INotificationService _notificationService;
-        private readonly IPatientService _patientService;
 
         public NotificationsController(INotificationService notificationService)
         {
             _notificationService = notificationService ?? throw new ArgumentNullException(nameof(notificationService));
         }
 
-        [Authorize(Roles ="ADMIN")]
+        //[Authorize(Roles ="ADMIN")]
         [HttpPost]
         public async Task<IActionResult> SendNotification([FromBody] NotificationDTO notificationDto)
         {
@@ -30,16 +29,16 @@ namespace Notification_Module.Controllers
 
         }
 
-        [Authorize]
-        [HttpGet("{patientid}")]
+        //[Authorize(Roles = "ADMIN", "USER")]
+        [HttpGet("GetNotificationsByPatientId/{patientid}")]
         public async Task<IActionResult> GetNotifications(int patientid)
         {
             var notifications = await _notificationService.GetNotificationsByUserIdAsync(patientid);
             return Ok(notifications);
         }
 
-        [Authorize]
-        [HttpDelete("{notificationId}")]
+        //[Authorize(Roles = "ADMIN", "USER")]
+        [HttpDelete("GetNotificationsByPatientId/{notificationId}")]
         public async Task<IActionResult> DeleteNotification(int notificationId)
         {
             {

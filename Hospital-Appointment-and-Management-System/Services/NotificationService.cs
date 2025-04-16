@@ -17,12 +17,16 @@ namespace Hospital_Appointment_and_Management_System.Services
 
         public async Task CreateNotificationAsync(NotificationDTO notificationDto)
         {
+            if (notificationDto.Timestamp == default)
+            {
+                notificationDto.Timestamp = DateTime.Now;
+            }
 
             var notification = new Notification
             {
                 PatientID = notificationDto.PatientID,
                 Message = notificationDto.Message,
-                Timestamp = DateTime.UtcNow
+                Timestamp = notificationDto.Timestamp
             };
 
             await _notificationRepository.AddNotificationAsync(notification);
@@ -34,11 +38,6 @@ namespace Hospital_Appointment_and_Management_System.Services
         {
             return await _notificationRepository.GetNotificationsByUserIdAsync(patientid);
         }
-
-        //public async Task<Notification?> GetNotificationByIdAsync(int id)
-        //{
-        //    return await _notificationRepository.GetNotificationByIdAsync(id);
-        //}
 
         public async Task<bool> DeleteNotificationAsync(int id)
         {

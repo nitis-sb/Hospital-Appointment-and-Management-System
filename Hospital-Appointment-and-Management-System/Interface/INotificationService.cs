@@ -7,8 +7,6 @@ namespace Hospital_Appointment_and_Management_System.Interface
     {
         Task CreateNotificationAsync(NotificationDTO notificationDto);
         Task<IEnumerable<Notification>> GetNotificationsByUserIdAsync(int patientid);
-
-        //Task<Notification?> GetNotificationByIdAsync(int id);
         Task<bool> DeleteNotificationAsync(int id);
 
     }

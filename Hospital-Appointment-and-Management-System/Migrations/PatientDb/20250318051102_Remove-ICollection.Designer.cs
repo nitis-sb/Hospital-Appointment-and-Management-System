@@ -11,7 +11,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace Hospital_Appointment_and_Management_System.Migrations.PatientDb
 {
-    [DbContext(typeof(PatientDbContext))]
+    [DbContext(typeof(ApplicationDbContext))]
     [Migration("20250318051102_Remove-ICollection")]
     partial class RemoveICollection
     {

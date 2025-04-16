@@ -27,7 +27,8 @@ namespace HAMS.Controllers
             return Ok(medicalHistories);
         }
 
-        [HttpGet("{patientId}")]
+        [HttpGet]
+        [Route("GetMedicalHistoryByPatientId/{patientId}")]
         public IActionResult GetMedicalHistoryByPatientId(int patientId)
         {
             var medicalHistories = _medicalHistoryRepository.GetMedicalHistoryByPatientId(patientId);
@@ -38,19 +39,43 @@ namespace HAMS.Controllers
             return Ok(medicalHistories);
         }
 
-        [HttpGet("history/{historyId}")]
+        [HttpGet]
+        [Route("history/{historyId}")]
         public IActionResult GetMedicalHistoryById(int historyId)
         {
             var medicalHistory = _medicalHistoryRepository.GetMedicalHistoryById(historyId);
+
             if (medicalHistory == null)
+
             {
+
                 return NotFound($"No medical history found with ID: {historyId}");
+
             }
-            return Ok(medicalHistory);
+
+            var medicalHistoryDto = new MedicalHistoryDto
+
+            {
+
+                HistoryID = medicalHistory.HistoryID,
+
+                PatientID = medicalHistory.PatientID,
+
+                Diagnosis = medicalHistory.Diagnosis,
+
+                Treatment = medicalHistory.Treatment,
+
+                DateOfVisit = medicalHistory.DateOfVisit
+
+            };
+
+            return Ok(medicalHistoryDto);
+
         }
 
 
         [HttpPost]
+        [Route("AddMedicalHistory")]
         public IActionResult AddMedicalHistory([FromBody] MedicalHistoryDto medicalHistoryDto)
         {
             if (medicalHistoryDto == null)
@@ -73,7 +98,8 @@ namespace HAMS.Controllers
             return CreatedAtAction(nameof(GetMedicalHistoryById), new { historyId = medicalHistory.HistoryID }, medicalHistory);
         }
 
-        [HttpPut("{historyId}")]
+        [HttpPut]
+        [Route("UpdateMedicalHistory/{historyId}")]
             public IActionResult UpdateMedicalHistory(int historyId, [FromBody] MedicalHistory medicalHistory)
         {
             if (historyId != medicalHistory.HistoryID)
@@ -96,7 +122,8 @@ namespace HAMS.Controllers
             return NoContent();
         }
 
-        [HttpDelete("{historyId}")]
+        [HttpDelete]
+        [Route("DeleteMedicalHistory/{historyId}")]
         public IActionResult DeleteMedicalHistory(int historyId)
         {
             var existingHistory = _medicalHistoryRepository.GetMedicalHistoryById(historyId);

@@ -38,27 +38,7 @@ namespace Hospital_Appointment_and_Management_System.Migrations.PatientDb
                     table.PrimaryKey("PK_PatientProfiles", x => x.PatientID);
                 });
 
-            migrationBuilder.CreateTable(
-                name: "TimeSlot",
-                columns: table => new
-                {
-                    TimeSlotID = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    Date = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    StartTime = table.Column<TimeSpan>(type: "time", nullable: false),
-                    EndTime = table.Column<TimeSpan>(type: "time", nullable: false),
-                    DoctorID = table.Column<int>(type: "int", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_TimeSlot", x => x.TimeSlotID);
-                    table.ForeignKey(
-                        name: "FK_TimeSlot_DoctorSchedules_DoctorID",
-                        column: x => x.DoctorID,
-                        principalTable: "DoctorSchedules",
-                        principalColumn: "DoctorID",
-                        onDelete: ReferentialAction.Cascade);
-                });
+            
 
             migrationBuilder.CreateTable(
                 name: "Appointments",

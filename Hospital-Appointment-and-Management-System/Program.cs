@@ -13,6 +13,7 @@ using Hospital_Appointment_and_Management_System.Services;
 using Microsoft.Extensions.Options;
 using Hospital_Appointment_and_Management_System.Interfaces;
 using Hospital_Appointment_and_Management_System.Repository;
+using System.Collections.Generic;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -57,7 +58,7 @@ builder.Services.AddSwaggerGen(options => {
 builder.Services.AddIdentityCore<IdentityUser>()
     .AddRoles<IdentityRole>()
     .AddTokenProvider<DataProtectorTokenProvider<IdentityUser>>("Userreg")
-    .AddEntityFrameworkStores<PatientDbContext>()
+    .AddEntityFrameworkStores<ApplicationDbContext>()
     .AddDefaultTokenProviders();
 
 builder.Services.Configure<IdentityOptions>(options =>
@@ -85,7 +86,7 @@ builder.Services.AddAuthentication(options =>
    });
 
 
-builder.Services.AddDbContext<PatientDbContext>(
+builder.Services.AddDbContext<ApplicationDbContext>(
     options => options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
 
 
@@ -100,7 +101,7 @@ builder.Services.AddIdentity<IdentityUser, IdentityRole>(options =>
     ;
     options.User.AllowedUserNameCharacters = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789-._@+";
 })
-    .AddEntityFrameworkStores<PatientDbContext>()
+    .AddEntityFrameworkStores<ApplicationDbContext>()
     .AddDefaultTokenProviders();
 
 async Task CreateRoles(IServiceProvider serviceProvider)
@@ -137,6 +138,41 @@ async Task CreateRoles(IServiceProvider serviceProvider)
             await userManager.AddToRoleAsync(adminUser, "ADMIN");
         }
     }
+    var doctorList = new List<IdentityUser>
+{
+    new IdentityUser { UserName = "10001@example.com", Email = "10001@example.com", EmailConfirmed = true },
+    new IdentityUser { UserName = "10002@example.com", Email = "10002@example.com", EmailConfirmed = true },
+    new IdentityUser { UserName = "10003@example.com", Email = "10003@example.com", EmailConfirmed = true },
+    new IdentityUser { UserName = "10004@example.com", Email = "10004@example.com", EmailConfirmed = true },
+    new IdentityUser { UserName = "10005@example.com", Email = "10005@example.com", EmailConfirmed = true },
+    new IdentityUser { UserName = "10006@example.com", Email = "10006@example.com", EmailConfirmed = true }
+};
+
+    foreach (var doctorUser in doctorList)
+    {
+        var existingUser = await userManager.FindByEmailAsync(doctorUser.Email);
+        if (existingUser != null)
+        {
+            // Assign the role of admin to the existing user
+            var addToRoleResult = await userManager.AddToRoleAsync(existingUser, "ADMIN");
+            if (addToRoleResult.Succeeded)
+            {
+                Console.WriteLine($"User {doctorUser.Email} added to Admin role successfully!");
+            }
+            else
+            {
+                foreach (var error in addToRoleResult.Errors)
+                {
+                    Console.WriteLine($"Error adding to role: {error.Description}");
+                }
+            }
+        }
+        else
+        {
+            Console.WriteLine($"User {doctorUser.Email} does not exist.");
+        }
+    }
+
 }
 
 var serviceProvider = builder.Services.BuildServiceProvider();
@@ -147,10 +183,10 @@ builder.Services.AddScoped<IPatientRepository, PatientRepository>();
 builder.Services.AddScoped<IPatientService, PatientService>();
 builder.Services.AddScoped<IDoctorScheduleRepository, DoctorScheduleRepository>();
 builder.Services.AddScoped<DoctorScheduleService>();
-builder.Services.AddScoped<IServiceAppointment, ServiceAppointment>();
-builder.Services.AddScoped<IRepositoryAppointment, RepositoryAppointment>();
+builder.Services.AddScoped<IServiceAppointment, AppointmentService>();
+builder.Services.AddScoped<IRepositoryAppointment, AppointmentRepository>();
 builder.Services.AddScoped<INotificationRepository, NotificationRepository>();
-builder.Services.AddScoped<NotificationService>();
+builder.Services.AddScoped<INotificationService, NotificationService>();
 builder.Services.AddScoped<IMedicalHistoryRepository, MedicalHistoryRepository>();
 builder.Services.AddScoped<IDoctorSchedulingService, DoctorScheduleService>();
 
@@ -162,7 +198,6 @@ builder.Services.AddCors(options =>
         builder => builder.AllowAnyOrigin().AllowAnyMethod().AllowAnyHeader());
 });
 
-builder.Services.AddControllersWithViews();
 
 var app = builder.Build();
 
@@ -174,13 +209,9 @@ if (app.Environment.IsDevelopment())
 }
 
 
-app.UseHttpsRedirection();
 app.UseCors("AllowAllOrigins");
+app.UseHttpsRedirection();
 app.UseAuthentication();
 app.UseAuthorization();
-app.UseEndpoints(endpoints =>
-{
-    endpoints.MapControllers();
-});
 app.MapControllers();
 app.Run();

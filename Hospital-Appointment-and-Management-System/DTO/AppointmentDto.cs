@@ -9,5 +9,6 @@ namespace Hospital_Appointment_and_Management_System.DTOs
         public int DoctorId { get; set; }
         public DateTime AppointmentDate { get; set; }
         public string Status { get; set; }
+        public int TimeSlotID { get; set; }
     }
 }

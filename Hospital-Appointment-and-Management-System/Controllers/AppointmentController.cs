@@ -5,6 +5,7 @@ using Microsoft.AspNetCore.Mvc;
 using Hospital_Appointment_and_Management_System.Interfaces;
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Identity;
 
 namespace Hospital_Appointment_and_Management_System.Controllers
 {
@@ -12,68 +13,51 @@ namespace Hospital_Appointment_and_Management_System.Controllers
     [ApiController]
     public class AppointmentController : ControllerBase
     {
-        private readonly IServiceAppointment _IServiceAppointment;
+        private readonly IServiceAppointment _service;
 
-        public AppointmentController(IServiceAppointment ServiceAppointment)
+        public AppointmentController(IServiceAppointment service)
         {
-            _IServiceAppointment = ServiceAppointment;
+            _service = service;
         }
 
         [HttpGet]
-        // [Authorize]
-        public async Task<ActionResult<IEnumerable<AppointmentDto>>> GetAll()
+        [Route("GetAppointmentsByPatientId/{patientId}")]
+        public async Task<IActionResult> GetByPatientId(int patientId)
         {
-            var allAppointments = await _IServiceAppointment.GetAll();
-            return Ok(allAppointments);
+            var appointments = await _service.GetAppointmentsByPatientIdAsync(patientId);
+            return Ok(appointments);
         }
 
-        [HttpGet("{id}")]
-        public async Task<ActionResult<AppointmentDto>> GetElementById(int id)
+        [HttpGet]
+        [Route("GetAppointmentById/{appointmentId}")]
+        public async Task<IActionResult> GetById(int appointmentId)
         {
-            var appointment = await _IServiceAppointment.GetElementById(id);
-            if (appointment == null)
-            {
-                return NotFound();
-            }
+            var appointment = await _service.GetAppointmentByIdAsync(appointmentId);
             return Ok(appointment);
         }
 
         [HttpPost]
-        //[Authorize]
-        public async Task<ActionResult<AppointmentDto>> Create([FromBody] AppointmentDto appointmentDto)
+        [Route("CreateAppointment")]
+        public async Task<IActionResult> PostAppointment([FromBody] AppointmentDto dto)
         {
-            if (appointmentDto == null)
-            {
-                return BadRequest("Invalid appointment data.");
-            }
-
-            var createdAppointment = await _IServiceAppointment.Create(appointmentDto);
-            return CreatedAtAction(nameof(GetElementById), new { id = createdAppointment.AppointmentID }, createdAppointment);
+            await _service.AddAppointmentAsync(dto);
+            return Ok();
         }
 
-        [HttpPut("{id}")]
-        //[Authorize]
-        public async Task<IActionResult> Update(int id, [FromBody] AppointmentDto appointmentDto)
+        [Route("UpdateAppointment")]
+        [HttpPut]
+        public async Task<IActionResult> UpdateAppointment([FromBody] AppointmentDto dto)
         {
-            if (id != appointmentDto.AppointmentID)
-            {
-                return BadRequest();
-            }
-
-            await _IServiceAppointment.Update(appointmentDto);
-            return NoContent();
+            await _service.UpdateAppointmentAsync(dto);
+            return Ok();
         }
 
-        [HttpDelete("{id}")]
-        //[Authorize]
-        public async Task<IActionResult> Delete(int id)
+        [HttpDelete]
+        [Route("DeleteAppointment/{appointmentId}")]
+        public async Task<IActionResult> DeleteAppointment(int appointmentId)
         {
-            var result = await _IServiceAppointment.Delete(id);
-            if (!result)
-            {
-                return NotFound();
-            }
-            return NoContent();
+            await _service.DeleteAppointmentAsync(appointmentId);
+            return Ok();
         }
     }
 }

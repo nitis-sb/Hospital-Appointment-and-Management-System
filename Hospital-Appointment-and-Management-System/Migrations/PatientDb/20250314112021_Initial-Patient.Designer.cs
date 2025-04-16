@@ -11,7 +11,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace Hospital_Appointment_and_Management_System.Migrations.PatientDb
 {
-    [DbContext(typeof(PatientDbContext))]
+    [DbContext(typeof(ApplicationDbContext))]
     [Migration("20250314112021_Initial-Patient")]
     partial class InitialPatient
     {

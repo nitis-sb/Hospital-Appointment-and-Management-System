@@ -9,9 +9,9 @@ namespace Hospital_Appointment_and_Management_System.Repositories
 {
     public class PatientRepository : IPatientRepository
     {
-        private readonly PatientDbContext _context;
+        private readonly ApplicationDbContext _context;
 
-        public PatientRepository(PatientDbContext context)
+        public PatientRepository(ApplicationDbContext context)
         {
             _context = context ?? throw new ArgumentNullException(nameof(context));
         }

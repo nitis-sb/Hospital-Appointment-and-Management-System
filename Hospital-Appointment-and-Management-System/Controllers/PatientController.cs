@@ -30,7 +30,8 @@ namespace Hospital_Appointment_and_Management_System.Controllers
 
         }
 
-        [HttpPost("register")]
+        [Route("register")]
+        [HttpPost]
         public async Task<IActionResult> RegisterPatient([FromBody] PatientRegistrationModel patientRegistration)
         {
             if (!ModelState.IsValid)
@@ -54,7 +55,8 @@ namespace Hospital_Appointment_and_Management_System.Controllers
             }
         }
 
-        [HttpPost("login")]
+        [Route("login")]
+        [HttpPost]
         public async Task<IActionResult> Login([FromBody] LoginModel loginModel)
         {
             if (!ModelState.IsValid)
@@ -65,7 +67,9 @@ namespace Hospital_Appointment_and_Management_System.Controllers
             try
             {
                 var user = await _patientService.LoginAsync(loginModel.Email, loginModel.Password);
-                var token = GenerateJwtToken(user);
+                var roles = await _userManager.GetRolesAsync(user);
+                var role = roles.FirstOrDefault();
+                var token = GenerateJwtToken(user, role);
                 return Ok(new { Token = token });
             }
             catch (System.Exception ex)
@@ -77,7 +81,7 @@ namespace Hospital_Appointment_and_Management_System.Controllers
 
         [Route("profile/{userId}")]
         [HttpGet]
-        [Authorize]
+        //[Authorize]
         public async Task<IActionResult> GetPatientProfile(string userId)
         {
             try
@@ -103,8 +107,10 @@ namespace Hospital_Appointment_and_Management_System.Controllers
                 return NotFound(new { message = ex.Message });
             }
         }
-        [HttpGet("patients/user/{username}")]
-        //[Authorize]
+
+        [Route("patients/user/{username}")]
+        [HttpGet]
+        [Authorize]
         public async Task<IActionResult> GetPatientIdByUsername(string username)
         {
             try
@@ -118,8 +124,9 @@ namespace Hospital_Appointment_and_Management_System.Controllers
             }
         }
 
-        [HttpPut("{patientId}")]
-        //[Authorize]
+        [Route("{patientId}")]
+        [HttpPut]
+        [Authorize]
         public async Task<IActionResult> UpdatePatientProfile(string userId, [FromBody] PatientProfile patientProfile)
         {
             if (userId != patientProfile.UserId)
@@ -144,27 +151,36 @@ namespace Hospital_Appointment_and_Management_System.Controllers
         }
 
 
-      
 
-        private string GenerateJwtToken(IdentityUser user)
+
+
+        private string GenerateJwtToken(IdentityUser user, string role)
         {
             var tokenHandler = new JwtSecurityTokenHandler();
             var key = Encoding.ASCII.GetBytes(_configuration["Jwt:Key"]);
+            var claims = new List<Claim>
+ {
+ new Claim(ClaimTypes.NameIdentifier, user.Id.ToString()),
+ new Claim(ClaimTypes.Name, user.UserName),
+ new Claim(ClaimTypes.Role, role)
+ };
+            var credentials = new SigningCredentials(new SymmetricSecurityKey(key), SecurityAlgorithms.HmacSha256Signature);
+
             var tokenDescriptor = new SecurityTokenDescriptor
             {
-                Subject = new ClaimsIdentity(new Claim[]
-                {
-                    new Claim(ClaimTypes.NameIdentifier, user.Id.ToString()),
-                    new Claim(ClaimTypes.Name, user.UserName)
-                }),
+                Subject = new ClaimsIdentity(claims),
                 Expires = DateTime.UtcNow.AddHours(1),
-                SigningCredentials = new SigningCredentials(new SymmetricSecurityKey(key), SecurityAlgorithms.HmacSha256Signature)
+                SigningCredentials = credentials,
+                Issuer = _configuration["JWT:Issuer"],
+                Audience = _configuration["JWT:Audience"]
             };
+
             var token = tokenHandler.CreateToken(tokenDescriptor);
             return tokenHandler.WriteToken(token);
         }
 
-       
+
+
     }
 
 }
