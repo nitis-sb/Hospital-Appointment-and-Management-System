@@ -7,6 +7,7 @@ namespace Hospital_Appointment_and_Management_System.Interfaces
 {
     public interface IRepositoryAppointment
     {
+        Task<IEnumerable<AppointmentDto>> GetAll();
         Task<Appointment> GetAppointmentByIdAsync(int appointmentId);
         Task<List<Appointment>> GetAppointmentsByPatientIdAsync(int patientId);
         Task AddAppointmentAsync(Appointment appointment);

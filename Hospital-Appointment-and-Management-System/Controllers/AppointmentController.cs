@@ -21,6 +21,14 @@ namespace Hospital_Appointment_and_Management_System.Controllers
         }
 
         [HttpGet]
+        [Route("GetAllAppointments")]
+        public async Task<IActionResult> GetAllAppointments()
+        {
+            var allAppointments = await _service.GetAll();
+            return Ok(allAppointments);
+        }
+
+        [HttpGet]
         [Route("GetAppointmentsByPatientId/{patientId}")]
         public async Task<IActionResult> GetByPatientId(int patientId)
         {

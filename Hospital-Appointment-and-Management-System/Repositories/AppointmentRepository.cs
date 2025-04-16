@@ -18,6 +18,20 @@ namespace Hospital_Appointment_and_Management_System.Repository
             _context = context;
         }
 
+        public async Task<IEnumerable<AppointmentDto>> GetAll()
+        {
+            var appointments = await _context.Appointments.ToListAsync();
+            var appointmentDtos = appointments.Select(a => new AppointmentDto
+            {
+                AppointmentID = a.AppointmentID,
+                PatientID = a.PatientID,
+                DoctorId = a.DoctorID,
+                AppointmentDate = a.AppointmentDate
+            }).ToList();
+
+            return appointmentDtos;
+        }
+
         public async Task<Appointment> GetAppointmentByIdAsync(int appointmentId)
         {
             return await _context.Appointments

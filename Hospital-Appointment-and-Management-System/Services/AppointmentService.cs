@@ -21,6 +21,11 @@ namespace Hospital_Appointment_and_Management_System.Services
             _notificationService = notificationService;
         }
 
+        public async Task<IEnumerable<AppointmentDto>> GetAll()
+        {
+            return await _repository.GetAll();
+        }
+
         public async Task<AppointmentDto> GetAppointmentByIdAsync(int appointmentId)
         {
             var appointment = await _repository.GetAppointmentByIdAsync(appointmentId);
